@@ -209,7 +209,7 @@
         int savepenalty;
         int savetotalareas;
         int savesolutionsmatrix;
-	int saveheuristicorder;
+        int saveheuristicorder;
         int solutionsmatrixheaders;
         int saveannealingtrace;
         int annealingtracerows;
@@ -492,6 +492,7 @@ void OutputScenario(int puno,int spno,double prop,double cm,
     int runopts,int heurotype,double costthresh, double tpf1, double tpf2,
     char savename[]);
 void OutputSolution(int puno,int R[],struct spustuff pu[],char savename[],int imode,struct sfname fnames);
+void OutputHeuristicOrder(int bestRunNum, char baseSaveName[], char bestSaveName[], int imode);
 void OutputSpecies(int spno,struct sspecies spec[],char savename[],int imode,double misslevel);
 void OutputSumSoln(int puno,int sumsoln[],struct spustuff pu[],char savename[],int imode);
 
