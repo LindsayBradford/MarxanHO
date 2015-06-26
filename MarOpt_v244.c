@@ -921,6 +921,19 @@ int Marxan(char sInputFileName[])
        OutputSpecies(spno,spec,tempname2,fnames.savespecies,misslevel);
     }
 
+    if (fnames.saveheuristicorder && fnames.savebest)
+    {
+      if (fnames.savespecies == 3)
+        sprintf(tempname2, "%s_hobest.csv", savename);
+      else
+      if (fnames.savespecies == 2)
+        sprintf(tempname2, "%s_hobest.txt", savename);
+      else
+        sprintf(tempname2, "%s_hobest.dat", savename);
+
+      OutputHeuristicOrder(iBestRun, savename, tempname2, fnames.saveheuristicorder);
+    }
+
     if (fnames.savesumsoln)
     {
        if (fnames.savesumsoln == 3)
@@ -7554,6 +7567,43 @@ void OutputSolution(int puno,int R[],struct spustuff pu[],char savename[],int im
              fprintf(fp,"%i,0\n",pu[i].id);
      fclose(fp);
 } /* Output Solution */
+
+void OutputHeuristicOrder(int bestRunNum, char baseSaveName[], char bestSaveName[], int imode)
+{
+  FILE *bestfp, *runfp;  /* Imode = 1, REST output, Imode = 2, Arcview output */
+  char ch, runLoadName[100];
+  int i;
+
+  bestfp = fopen(bestSaveName, "w");
+  if (!bestfp)
+    ShowErrorMessage("Cannot save output to %s \n", bestSaveName);
+
+  if (imode == 3)
+    sprintf(runLoadName, "%s_ho%05i.csv", baseSaveName, bestRunNum % 10000);
+  else
+  if (imode == 2)
+    sprintf(runLoadName, "%s_ho%05i.txt", baseSaveName, bestRunNum % 10000);
+  else
+    sprintf(runLoadName, "%s_ho%05i.dat", baseSaveName, bestRunNum % 10000);
+
+  runfp = fopen(runLoadName, "r");
+  if (!runfp)
+    ShowErrorMessage("Cannot load data from %s \n", runLoadName);
+
+  while (1)
+  {
+    ch = fgetc(runfp);
+
+    if (ch == EOF)
+      break;
+    else
+      putc(ch, bestfp);
+  }
+
+  fclose(runfp);
+  fclose(bestfp);
+}  /* OutputHeuristicOrder */
+
 
 /************* Scenario Output File ***************/
 /*** OutputScenario ****/
